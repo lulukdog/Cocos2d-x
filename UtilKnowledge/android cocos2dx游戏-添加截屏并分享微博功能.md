@@ -1,5 +1,5 @@
 ## 分享部分 ##
-### 安卓代码 ###
+#### 安卓代码 ####
     public class ShareSupport {
     	// when you want to use share(),firstly you should init acty.
     	public static Activity acty;
@@ -23,7 +23,7 @@
     	}
     }
 
-### JNI代码 ###
+#### JNI代码 ####
 	#include "jni_interfaces.h"
 	#include <android/jni/JniHelper.h>
 	
@@ -40,7 +40,7 @@
 	    }
 	}
 
-### C++代码 ###
+#### C++代码 ####
 	#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	  Share();
 	  CCLog("share ok");
