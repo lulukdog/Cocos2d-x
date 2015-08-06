@@ -1,5 +1,7 @@
 ## 分享部分 ##
 #### 安卓代码 ####
+
+```java
     public class ShareSupport {
     	// when you want to use share(),firstly you should init acty.
     	public static Activity acty;
@@ -22,6 +24,7 @@
     		}).start();
     	}
     }
+```
 
 #### JNI代码 ####
 	#include "jni_interfaces.h"
