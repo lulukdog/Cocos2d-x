@@ -27,6 +27,7 @@
 ```
 
 #### JNI代码 ####
+```c++
 	#include "jni_interfaces.h"
 	#include <android/jni/JniHelper.h>
 	
@@ -42,16 +43,18 @@
 	        }
 	    }
 	}
-
+```
 #### C++代码 ####
+```c++
 	#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	  Share();
 	  CCLog("share ok");
 	#endif
-
+```
 ## 截屏部分的代码 ##
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
-    CCRenderTexture* in_texture = CCRenderTexture::renderTextureWithWidthAndHeight((int)size.width, (int)size.height,kCCTexture2DPixelFormat_RGBA8888);
+```c++
+    CCSize size = CCDirector::sharedDirector()->getWinSize();
+    CCRenderTexture* in_texture = CCRenderTexture::renderTextureWithWidthAndHeight((int)size.width, 			      (int)size.height,kCCTexture2DPixelFormat_RGBA8888);
     in_texture->getSprite()->setAnchorPoint( ccp(0.5f,0.5f) );
     in_texture->setPosition( ccp(size.width/2, size.height/2) );
     in_texture->setAnchorPoint( ccp(0.5f,0.5f) );
@@ -61,3 +64,4 @@
     in_texture->end();
 
     CCLog("%d",in_texture->saveBuffer(kCCImageFormatPNG,"share.png",0,0,800,480));
+```
