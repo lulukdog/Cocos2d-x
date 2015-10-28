@@ -2,7 +2,9 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"
-
+#include "Model/CLocalModel.h"
+#include "Controller/CLevelController.h"
+#include "Controller/CSenceController.h"
 /**
 @brief    The cocos2d Application.
 
@@ -13,8 +15,6 @@ class  AppDelegate : private cocos2d::Application
 public:
     AppDelegate();
     virtual ~AppDelegate();
-
-    virtual void initGLContextAttrs();
 
     /**
     @brief    Implement Director and Scene init code here.
@@ -34,7 +34,16 @@ public:
     @param  the pointer of the application
     */
     virtual void applicationWillEnterForeground();
+
+	void init();
+
+public:
+	CLocalModel*               m_pLocalModel;
+	CLevelController*          m_pLevelController;
+	CSenceController*          m_pSceneController;
 };
+
+extern AppDelegate* theApp;
 
 #endif // _APP_DELEGATE_H_
 

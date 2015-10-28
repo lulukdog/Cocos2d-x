@@ -1,62 +1,87 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "View/Scene/CMainScene.h"
+#include "Utils/Utils.h"
+#include "Controller/CSoundController.h"
 
 USING_NS_CC;
+using namespace util;
 
-AppDelegate::AppDelegate() {
 
+AppDelegate *theApp = nullptr;
+
+AppDelegate::AppDelegate() 
+{
+	theApp = this;
+	m_pLocalModel      = nullptr;
+	m_pLevelController = nullptr;
+	m_pSceneController = nullptr;
 }
 
 AppDelegate::~AppDelegate() 
 {
+	CC_SAFE_DELETE(m_pLocalModel);
+	CC_SAFE_DELETE(m_pLevelController);
+	CC_SAFE_DELETE(m_pSceneController);
 }
 
-//if you want a different context,just modify the value of glContextAttrs
-//it will takes effect on all platforms
-void AppDelegate::initGLContextAttrs()
+bool AppDelegate::applicationDidFinishLaunching()
 {
-    //set OpenGL context attributions,now can only set six attributions:
-    //red,green,blue,alpha,depth,stencil
-    GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
-
-    GLView::setGLContextAttrs(glContextAttrs);
-}
-
-// If you want to use packages manager to install more packages, 
-// don't modify or remove this function
-static int register_all_packages()
-{
-    return 0; //flag for packages manager
-}
-
-bool AppDelegate::applicationDidFinishLaunching() {
-    // initialize director
-    auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
-    if(!glview) {
-        glview = GLViewImpl::create("My Game");
-        director->setOpenGLView(glview);
+    auto pDirector = Director::getInstance();
+	auto pGLView = pDirector->getOpenGLView();
+    if(!pGLView) 
+	{
+		pGLView = GLViewImpl::create("My_Game");
+		pGLView->setFrameSize(800, 480);
+		//6
+		//pGLView->setFrameSize(1334, 750);
+		//5
+		pGLView->setFrameSize(1136, 640);
+        pDirector->setOpenGLView(pGLView);
     }
-
-    // turn on display FPS
-    director->setDisplayStats(true);
-
-    // set FPS. the default value is 1.0/60 if you don't call this
-    director->setAnimationInterval(1.0 / 60);
-
-    register_all_packages();
-
-    // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
-
-    // run
-    director->runWithScene(scene);
-
+	//picture-frequency adjustment
+	pDirector->setAnimationInterval(1.0 / 60);
+	//pDirector->setDisplayStats(true);
+	if (this->getTargetPlatform() == Application::Platform::OS_IPAD)
+	{
+		pGLView->setDesignResolutionSize(960, 640, ResolutionPolicy::SHOW_ALL);
+	}
+	else
+	{
+		Size viewSize = pGLView->getFrameSize();
+		float fRate = viewSize.width / viewSize.height;
+		if (fRate < 1.5)
+		{
+			pGLView->setDesignResolutionSize(960, 640, ResolutionPolicy::SHOW_ALL);
+		}
+		else
+		{
+			pGLView->setDesignResolutionSize(960, 640, ResolutionPolicy::FIXED_HEIGHT);
+		}
+	}
+	this->init();
+    auto pScene = CMainView::createScene();
+    pDirector->runWithScene(pScene);
     return true;
 }
 
+void AppDelegate::init()
+{
+	WindowUtil::initialize();
+	CSoundController::initialize();
+	//init data
+	m_pLocalModel = new CLocalModel();
+	m_pLocalModel->initialize();
+	//init Controller
+	m_pLevelController = new CLevelController();
+	m_pLevelController->initialize();
+	m_pSceneController = new CSenceController();
+	m_pSceneController->initialize();
+	CSoundController::playSndBackground();
+}
+
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
-void AppDelegate::applicationDidEnterBackground() {
+void AppDelegate::applicationDidEnterBackground()
+{
     Director::getInstance()->stopAnimation();
 
     // if you use SimpleAudioEngine, it must be pause
@@ -64,9 +89,9 @@ void AppDelegate::applicationDidEnterBackground() {
 }
 
 // this function will be called when the app is active again
-void AppDelegate::applicationWillEnterForeground() {
+void AppDelegate::applicationWillEnterForeground() 
+{
     Director::getInstance()->startAnimation();
-
     // if you use SimpleAudioEngine, it must resume here
     // SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }
